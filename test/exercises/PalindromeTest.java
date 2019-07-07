@@ -1,20 +1,29 @@
 package exercises;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 class PalindromeTest {
-	
+
 	Palindrome testPalindrome = new Palindrome();
 
 	@Test
 	void testLoadWords() {
 		assertTrue(testPalindrome.loadWords().contains("apple"));
 	}
-	
-	// 2. Test that a word exists in the dictionary 
-	
-	// 3. Test that a word is a palindrome
+
+	@Test
+	void wordExist() throws Exception {
+		assertTrue(testPalindrome.wordExist("superconception"));
+	}
+
+	@Test
+	void wordIsAPalindrome() throws Exception {
+		assertTrue(testPalindrome.wordIsAPalindrome("kayak"));
+		assertFalse(testPalindrome.wordIsAPalindrome("Zapoteco"));
+	}
+
 
 }
