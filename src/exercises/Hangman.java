@@ -2,8 +2,13 @@ package exercises;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 import javax.sound.sampled.AudioInputStream;
@@ -13,23 +18,34 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import examples.FileHelper;
+
 public class Hangman extends KeyAdapter {
 
 	Stack<String> puzzles = new Stack<String>();
 	ArrayList<JLabel> boxes = new ArrayList<JLabel>();
-	int lives = 9;
+	static int lives = 9;
 	JLabel livesLabel = new JLabel("" + lives);
 
 	public static void main(String[] args) {
+
 		Hangman hangman = new Hangman();
+
 		hangman.addPuzzles();
 		hangman.createUI();
+		
+
 	}
 
 	private void addPuzzles() {
-		puzzles.push("defenestrate");
-		puzzles.push("fancypants");
-		puzzles.push("elements");
+		List<String> words = FileHelper.loadFileContentsIntoArrayList("resource/words.txt");
+		Random random = new Random();
+		String word = words.get(random.nextInt(words.size()));
+		puzzles.push(word);
+		puzzles.push(word);
+		puzzles.push(word);
+		
+
 	}
 
 	JPanel panel = new JPanel();
@@ -54,6 +70,7 @@ public class Hangman extends KeyAdapter {
 		puzzle = puzzles.pop();
 		System.out.println("puzzle is now " + puzzle);
 		createBoxes();
+
 	}
 
 	public void keyTyped(KeyEvent arg0) {
@@ -91,7 +108,7 @@ public class Hangman extends KeyAdapter {
 		}
 		boxes.clear();
 	}
-	
+
 	public void playDeathKnell() {
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resource/funeral-march.wav"));
@@ -105,7 +122,3 @@ public class Hangman extends KeyAdapter {
 	}
 
 }
-
-
-
-
