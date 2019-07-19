@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -21,7 +23,8 @@ import javax.swing.JPanel;
 import examples.FileHelper;
 
 public class Hangman extends KeyAdapter {
-
+	private Pattern pattern;
+	private Matcher matcher;
 	Stack<String> puzzles = new Stack<String>();
 	ArrayList<JLabel> boxes = new ArrayList<JLabel>();
 	static int lives = 9;
@@ -31,21 +34,31 @@ public class Hangman extends KeyAdapter {
 
 		Hangman hangman = new Hangman();
 
-		hangman.addPuzzles();
-		hangman.createUI();
-		
+		try {
+			hangman.addPuzzles();
+		} catch (Exception e) {
 
+			e.getMessage();
+		}
+		hangman.createUI();
 	}
 
-	private void addPuzzles() {
+	private void addPuzzles() throws Exception {
 		List<String> words = FileHelper.loadFileContentsIntoArrayList("resource/words.txt");
 		Random random = new Random();
 		String word = words.get(random.nextInt(words.size()));
-		puzzles.push(word);
-		puzzles.push(word);
-		puzzles.push(word);
-		
+		String regex = "\\p{Punct}";
+		pattern = Pattern.compile(regex);
+		matcher = pattern.matcher(word);
 
+		if (matcher.matches()) {
+
+			throw new Exception("Special character is found, not a legal word");
+
+		} else {
+
+			puzzles.push(word);
+		}
 	}
 
 	JPanel panel = new JPanel();
